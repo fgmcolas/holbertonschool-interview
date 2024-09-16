@@ -2,7 +2,6 @@
 """Module which contains function"""
 
 
-
 def minOperations(n):
     """ Calcules the fewest number of operations
 
