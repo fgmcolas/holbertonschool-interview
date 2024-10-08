@@ -1,45 +1,56 @@
 #!/usr/bin/python3
-"""Script to get stats from a request"""
-
+"""
+script that reads stdin line by line and computes metrics
+"""
 import sys
+import signal
 
-codes = {}
-status_codes = ['200', '301', '400', '401', '403', '404', '405', '500']
-count = 0
-size = 0
+# Initialize global variables
+total_file_size = 0
+status_code_counts = {
+    "200": 0,
+    "301": 0,
+    "400": 0,
+    "401": 0,
+    "403": 0,
+    "404": 0,
+    "405": 0,
+    "500": 0,
+}
+line_count = 0
 
+
+def print_statistics():
+    """
+    Prints the current statistics.
+    """
+    print("File size: {}".format(total_file_size))
+    for code in sorted(status_code_counts.keys()):
+        if status_code_counts[code] > 0:
+            print("{}: {}".format(code, status_code_counts[code]))
+
+
+def signal_handler(sig, frame):
+    """
+    Prints the stats obtained from the file when a keyboard interrupt occurs.
+    """
+    print_statistics()
+
+
+# Register the signal handler for SIGINT
+signal.signal(signal.SIGINT, signal_handler)
 try:
-    for ln in sys.stdin:
-        if count == 10:
-            print("File size: {}".format(size))
-            for key in sorted(codes):
-                print("{}: {}".format(key, codes[key]))
-            count = 1
-        else:
-            count += 1
-
-        ln = ln.split()
-
-        try:
-            size = size + int(ln[-1])
-        except (IndexError, ValueError):
-            pass
-
-        try:
-            if ln[-2] in status_codes:
-                if codes.get(ln[-2], -1) == -1:
-                    codes[ln[-2]] = 1
-                else:
-                    codes[ln[-2]] += 1
-        except IndexError:
-            pass
-
-    print("File size: {}".format(size))
-    for key in sorted(codes):
-        print("{}: {}".format(key, codes[key]))
-
-except KeyboardInterrupt:
-    print("File size: {}".format(size))
-    for key in sorted(codes):
-        print("{}: {}".format(key, codes[key]))
-    raise
+    for line in sys.stdin:
+        line_count += 1
+        line_parsed = line.split()
+        length_line = len(line_parsed)
+        if length_line < 2:
+            continue
+        total_file_size += int(line_parsed[length_line - 1])
+        if line_parsed[length_line - 2] not in status_code_counts.keys():
+            continue
+        status_code_counts[line_parsed[length_line - 2]] += 1
+        if line_count % 10 == 0:
+            print_statistics()
+finally:
+    print_statistics()
