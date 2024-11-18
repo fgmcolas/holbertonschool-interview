@@ -60,3 +60,4 @@ def solve_nqueens():
 
 
 solve_nqueens()
+ 
