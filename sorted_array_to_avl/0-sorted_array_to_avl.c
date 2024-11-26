@@ -53,10 +53,10 @@ binary_tree_t *add_node(int *array, size_t size, avl_t *parent)
 avl_t *sorted_array_to_avl(int *array, size_t size)
 {
 	if (!array)
-		return NULL;
+		return (NULL);
 
 	if (!size)
-		return NULL;
+		return (NULL);
 
 	return ((avl_t *)add_node(array, size, NULL));
 }
