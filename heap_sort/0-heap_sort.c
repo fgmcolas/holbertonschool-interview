@@ -1,4 +1,4 @@
-#include "header.h"
+#include "sort.h"
 /**
  * check_tree - swiftdown check
  * @array: pointer to array
