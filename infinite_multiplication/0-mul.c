@@ -8,20 +8,20 @@
  */
 int main(int argc, char *argv[])
 {
-    char *error = "Error\n";
-    int i;
+	char *error = "Error\n";
+	int i;
 
-    if (argc != 3 || !is_a_number(argv[1]) || !is_a_number(argv[2]))
-    {
-        for (i = 0; error[i] != '\0'; i++)
-        {
-            _putchar(error[i]);
-        }
-        exit(98);
-    }
+	if (argc != 3 || !is_a_number(argv[1]) || !is_a_number(argv[2]))
+	{
+		for (i = 0; error[i] != '\0'; i++)
+		{
+			_putchar(error[i]);
+		}
+		exit(98);
+	}
 
-    multiply(argv[1], argv[2]);
-    return (0);
+	multiply(argv[1], argv[2]);
+	return (0);
 }
 
 /*corergir lo anterior, porq solo compara el primer caracter*/
@@ -36,47 +36,47 @@ int main(int argc, char *argv[])
 
 void multiply(char *num_1, char *num_2)
 {
-    char mul[10][MAX1], answer[MAX1][MAX2];
-    int tag, i, j, len_1, len_2, res, value, pos_1, pos_2, row, z;
+	char mul[10][MAX1], answer[MAX1][MAX2];
+	int tag, i, j, len_1, len_2, res, value, pos_1, pos_2, row, z;
 
-    for (len_1 = str_len(num_1), len_2 = str_len(num_2), i = 0; i < 10; i++)
-        for (j = 0; j < MAX1; j++)
-            mul[i][j] = '.';
+	for (len_1 = str_len(num_1), len_2 = str_len(num_2), i = 0; i < 10; i++)
+		for (j = 0; j < MAX1; j++)
+			mul[i][j] = '.';
 
-    for (i = 0; i < MAX1; i++)
-        for (j = 0; j < MAX2; j++)
-            answer[i][j] = '.';
+	for (i = 0; i < MAX1; i++)
+		for (j = 0; j < MAX2; j++)
+			answer[i][j] = '.';
 
-    /* 1. Creating multiplication table*/
-    for (tag = 0, i = 0; i < 10; i++)
-    {
-        for (j = 0; j <= len_1; j++)
-        {
-            pos_1 = len_1 - j - 1;
-            if (pos_1 >= 0)
-            {
-                res = ((num_1[pos_1] - 48) * i) + tag;
-                value = res % 10;
-                mul[i][j] = (value + '0');
-                tag = res / 10;
-            }
-            else
-            {
-                mul[i][j] = (tag != 0) ? tag + 48 : '.';
-                tag = 0;
-            }
-        }
-    }
+	/* 1. Creating multiplication table*/
+	for (tag = 0, i = 0; i < 10; i++)
+	{
+		for (j = 0; j <= len_1; j++)
+		{
+			pos_1 = len_1 - j - 1;
+			if (pos_1 >= 0)
+			{
+				res = ((num_1[pos_1] - 48) * i) + tag;
+				value = res % 10;
+				mul[i][j] = (value + '0');
+				tag = res / 10;
+			}
+			else
+			{
+				mul[i][j] = (tag != 0) ? tag + 48 : '.';
+				tag = 0;
+			}
+		}
+	}
 
-    /* 2. Creating answer table*/
-    for (j = 0; j < len_2; j++)
-    {
-        pos_2 = len_2 - j - 1;
-        row = num_2[pos_2] - 48;
-        for (z = 0; z < len_1 + 1; z++)
-            answer[j][z + j] = mul[row][z];
-    }
-    sum_and_print(answer, len_1, len_2);
+	/* 2. Creating answer table*/
+	for (j = 0; j < len_2; j++)
+	{
+		pos_2 = len_2 - j - 1;
+		row = num_2[pos_2] - 48;
+		for (z = 0; z < len_1 + 1; z++)
+			answer[j][z + j] = mul[row][z];
+	}
+	sum_and_print(answer, len_1, len_2);
 }
 
 /**
@@ -87,13 +87,13 @@ void multiply(char *num_1, char *num_2)
  */
 int is_a_number(char *a_str)
 {
-    while (*a_str != '\0')
-    {
-        if (*a_str < '0' || *a_str > '9')
-            return (_FALSE_);
-        a_str++;
-    }
-    return (_TRUE_);
+	while (*a_str != '\0')
+	{
+		if (*a_str < '0' || *a_str > '9')
+			return (_FALSE_);
+		a_str++;
+	}
+	return (_TRUE_);
 }
 
 /**
@@ -106,46 +106,46 @@ int is_a_number(char *a_str)
  */
 void sum_and_print(char a[MAX1][MAX2], int len_1, int len_2)
 {
-    int tag, i, j, sum, value;
-    char total[MAX2], ans[MAX2 - 1];
-    char *ar;
+	int tag, i, j, sum, value;
+	char total[MAX2], ans[MAX2 - 1];
+	char *ar;
 
-    /* 3. Add each column from left to right */
-    tag = 0;
-    for (j = 0; j <= (len_1 + len_2); j++)
-    {
-        sum = 0;
-        for (i = 0; i < len_2; i++)
-            sum += (a[i][j] >= '0' && a[i][j] <= '9') ? a[i][j] - 48 : 0;
-        value = (sum + tag) % 10; /* las digit added */
-        total[j] = (value + '0'); /* converted to*/
-        tag = (sum + tag) / 10;
-    }
+	/* 3. Add each column from left to right */
+	tag = 0;
+	for (j = 0; j <= (len_1 + len_2); j++)
+	{
+		sum = 0;
+		for (i = 0; i < len_2; i++)
+			sum += (a[i][j] >= '0' && a[i][j] <= '9') ? a[i][j] - 48 : 0;
+		value = (sum + tag) % 10; /* las digit added */
+		total[j] = (value + '0'); /* converted to*/
+		tag = (sum + tag) / 10;
+	}
 
-    /* Reverse the string */
-    for (i = 0; i < len_1 + len_2; i++)
-    {
-        ans[i] = total[len_1 + len_2 - 1 - i];
-    }
-    ans[i] = '\0';
+	/* Reverse the string */
+	for (i = 0; i < len_1 + len_2; i++)
+	{
+		ans[i] = total[len_1 + len_2 - 1 - i];
+	}
+	ans[i] = '\0';
 
-    /* remove 0-s from the left side of the string */
-    value = str_len(ans);
-    for (i = 0; i < value; i++)
-    {
-        if (ans[i] == '0')
-            ar = &ans[i + 1];
-        else
-        {
-            ar = &ans[i];
-            i = value;
-        }
-    }
-    for (i = 0; ar[i] != '\0'; i++)
-    {
-        _putchar(ar[i]);
-    }
-    putchar('\n');
+	/* remove 0-s from the left side of the string */
+	value = str_len(ans);
+	for (i = 0; i < value; i++)
+	{
+		if (ans[i] == '0')
+			ar = &ans[i + 1];
+		else
+		{
+			ar = &ans[i];
+			i = value;
+		}
+	}
+	for (i = 0; ar[i] != '\0'; i++)
+	{
+		_putchar(ar[i]);
+	}
+	putchar('\n');
 }
 
 /**
@@ -156,9 +156,9 @@ void sum_and_print(char a[MAX1][MAX2], int len_1, int len_2)
  */
 int str_len(char *a)
 {
-    int i;
-    for (i = 0; a[i] != '\0'; i++)
-    {
-    }
-    return (i);
+	int i;
+	for (i = 0; a[i] != '\0'; i++)
+	{
+	}
+	return (i);
 }
