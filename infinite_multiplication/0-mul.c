@@ -103,39 +103,29 @@ int is_a_number(char *a_str)
  */
 void sum_and_print(char a[MAX1][MAX2], int len_1, int len_2)
 {
-	int tag, i, j, sum, value;
-	char total[MAX2], ans[MAX2 - 1];
+	int tag = 0, i, j, sum, value, total_len;
+	char total[MAX2 + 1] = {0};
 	char *ar;
 
-	tag = 0;
-	for (j = 0; j <= (len_1 + len_2); j++)
+	total_len = len_1 + len_2;
+	for (j = 0; j < total_len; j++)
 	{
 		sum = 0;
 		for (i = 0; i < len_2; i++)
-			sum += (a[i][j] >= '0' && a[i][j] <= '9') ? a[i][j] - 48 : 0;
+			sum += (a[i][j] >= '0' && a[i][j] <= '9') ? a[i][j] - '0' : 0;
 		value = (sum + tag) % 10;
 		total[j] = (value + '0');
 		tag = (sum + tag) / 10;
 	}
+	if (tag > 0)
+		total[j++] = tag + '0';
+	total[j] = '\0';
 
-	for (i = 0; i < len_1 + len_2; i++)
-		ans[i] = total[len_1 + len_2 - 1 - i];
-	ans[i] = '\0';
-
-	value = str_len(ans);
-	for (i = 0; i < value; i++)
-	{
-		if (ans[i] != '0')
-		{
-			ar = &ans[i];
-			break;
-		}
-	}
-	if (i == value)
-		ar = "0";
-
-	for (i = 0; ar[i] != '\0'; i++)
-		_putchar(ar[i]);
+	for (i = 0; total[total_len - i - 1] == '0' && total_len - i - 1 > 0; i++)
+		;
+	ar = &total[total_len - i - 1];
+	while (*ar)
+		_putchar(*ar--);
 	_putchar('\n');
 }
 
