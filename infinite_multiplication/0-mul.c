@@ -1,145 +1,92 @@
-#include "holberton.h"
-
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <ctype.h>
 /**
- * main - multiplies two positive numbers
- * @argc: argument counter
- * @argv: argument vector
- * Return: 0
+ * _isnumber - checks if string is number
+ *
+ * @s: string
+ *
+ * Return: 1 if number, 0 if not
  */
-int main(int argc, char *argv[])
+int _isnumber(char *s)
 {
-	char *error = "Error\n";
-	int i;
+	int i, check, d;
 
-	if (argc != 3 || !is_a_number(argv[1]) || !is_a_number(argv[2]))
+	d = 0, check = 1;
+	for (i = 0; *(s + i) != 0; i++)
 	{
-		for (i = 0; error[i] != '\0'; i++)
-			_putchar(error[i]);
-		exit(98);
-	}
-	multiply(argv[1], argv[2]);
-	return (0);
-}
-
-/**
- * multiply - Fills an array with the multiplication num_1 times i
- * Arguments
- * @num_1:	string representing the 1st number in 10 base
- * @num_2:  string representing the 2nd number in 10 base
- * Returns - The multiplication
- */
-
-void multiply(char *num_1, char *num_2)
-{
-	char mul[10][MAX1], answer[MAX1][MAX2];
-	int tag, i, j, len_1, len_2, res, value, pos_1, pos_2, row, z;
-
-	len_1 = str_len(num_1);
-	len_2 = str_len(num_2);
-	for (i = 0; i < 10; i++)
-		for (j = 0; j < MAX1; j++)
-			mul[i][j] = '.';
-
-	for (i = 0; i < MAX1; i++)
-		for (j = 0; j < MAX2; j++)
-			answer[i][j] = '.';
-
-	for (tag = 0, i = 0; i < 10; i++)
-	{
-		for (j = 0; j <= len_1; j++)
+		d = isdigit(*(s + i));
+		if (d == 0)
 		{
-			pos_1 = len_1 - j - 1;
-			if (pos_1 >= 0)
-			{
-				res = ((num_1[pos_1] - 48) * i) + tag;
-				value = res % 10;
-				mul[i][j] = (value + '0');
-				tag = res / 10;
-			}
-			else
-			{
-				mul[i][j] = (tag != 0) ? tag + 48 : '.';
-				tag = 0;
-			}
+			check = 0;
+			break;
 		}
 	}
-
-	for (j = 0; j < len_2; j++)
-	{
-		pos_2 = len_2 - j - 1;
-		row = num_2[pos_2] - 48;
-		for (z = 0; z < len_1 + 1; z++)
-			answer[j][z + j] = mul[row][z];
-	}
-	sum_and_print(answer, len_1, len_2);
+	return (check);
 }
 
 /**
- * is_a_number - Indicates if a string represents a number in 10 base
- * Arguments
- * @a_str: string representing a number in 10 base
- * Return: 1 if true, 0 if not.
+ * _callocX - reserves memory initialized to 0
+ *
+ * @nmemb: # of bytes
+ *
+ * Return: pointer
  */
-int is_a_number(char *a_str)
+char *_callocX(unsigned int nmemb)
 {
-	if (*a_str == '\0')
-		return (_FALSE_);
-	while (*a_str != '\0')
-	{
-		if (*a_str < '0' || *a_str > '9')
-			return (_FALSE_);
-		a_str++;
-	}
-	return (_TRUE_);
+	unsigned int i;
+	char *p;
+
+	p = malloc(nmemb + 1);
+	if (p == 0)
+		return (0);
+	for (i = 0; i < nmemb; i++)
+		p[i] = '0';
+	p[i] = '\0';
+	return (p);
 }
 
 /**
- * sum_and_print - Generates the sumation and print the results
- * Arguments
- * @a:	matrix with multiplitation tables
- * @len_1: len of string 1
- * @len_2: len os string 2
- * Return: noting.
+ * main - multiplies inf numbers
+ *
+ * @argc: # of cmd line args
+ * @argv: cmd line args
+ * Return: No return
  */
-void sum_and_print(char a[MAX1][MAX2], int len_1, int len_2)
+int main(int argc, char **argv)
 {
-	int tag = 0, i, j, sum, value, total_len;
-	char total[MAX2 + 1] = {0};
-	char *ar;
+	int i, j, l1, l2, lful, mul, add, ten, ten2, tl, zer = 0;
+	char *res;
 
-	total_len = len_1 + len_2;
-	for (j = 0; j < total_len; j++)
+	if (argc != 3 || _isnumber(argv[1]) == 0 || _isnumber(argv[2]) == 0)
+		printf("Error\n"), exit(98);
+	if (atoi(argv[1]) == 0 || atoi(argv[2]) == 0)
+		printf("0\n"), exit(0);
+	l1 = strlen(argv[1]), l2 = strlen(argv[2]);
+	lful = l1 + l2;
+	res = _callocX(lful);
+	if (res == 0)
+		printf("Error\n"), exit(98);
+	for (i = l2 - 1; i >= 0; i--)
 	{
-		sum = 0;
-		for (i = 0; i < len_2; i++)
-			sum += (a[i][j] >= '0' && a[i][j] <= '9') ? a[i][j] - '0' : 0;
-		value = (sum + tag) % 10;
-		total[j] = (value + '0');
-		tag = (sum + tag) / 10;
+		ten = 0, ten2 = 0;
+		for (j = l1 - 1; j >= 0; j--)
+		{
+			tl = i + j + 1;
+			mul = (argv[1][j] - '0') * (argv[2][i] - '0') + ten;
+			ten = mul / 10;
+			add = (res[tl] - '0') + (mul % 10) + ten2;
+			ten2 = add / 10;
+			res[tl] = (add % 10) + '0';
+		}
+		res[tl - 1] = (ten + ten2) + '0';
 	}
-	if (tag > 0)
-		total[j++] = tag + '0';
-	total[j] = '\0';
-
-	for (i = 0; total[total_len - i - 1] == '0' && total_len - i - 1 > 0; i++)
-		;
-	ar = &total[total_len - i - 1];
-	while (*ar)
-		_putchar(*ar--);
-	_putchar('\n');
-}
-
-/**
- * str_len - Calculates the lenght of a string
- * Arguments
- * @a:	matrix with multiplitation tables
- * Return: The lengnth of a.
- */
-int str_len(char *a)
-{
-	int i;
-
-	for (i = 0; a[i] != '\0'; i++)
-		;
-	return (i);
+	if (res[0] == '0')
+		zer = 1;
+	for (; zer < lful; zer++)
+		printf("%c", res[zer]);
+	printf("\n");
+	free(res);
+	return (0);
 }
