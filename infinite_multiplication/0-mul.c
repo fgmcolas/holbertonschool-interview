@@ -14,17 +14,12 @@ int main(int argc, char *argv[])
 	if (argc != 3 || !is_a_number(argv[1]) || !is_a_number(argv[2]))
 	{
 		for (i = 0; error[i] != '\0'; i++)
-		{
 			_putchar(error[i]);
-		}
 		exit(98);
 	}
-
 	multiply(argv[1], argv[2]);
 	return (0);
 }
-
-/*corergir lo anterior, porq solo compara el primer caracter*/
 
 /**
  * multiply - Fills an array with the multiplication num_1 times i
@@ -39,7 +34,9 @@ void multiply(char *num_1, char *num_2)
 	char mul[10][MAX1], answer[MAX1][MAX2];
 	int tag, i, j, len_1, len_2, res, value, pos_1, pos_2, row, z;
 
-	for (len_1 = str_len(num_1), len_2 = str_len(num_2), i = 0; i < 10; i++)
+	len_1 = str_len(num_1);
+	len_2 = str_len(num_2);
+	for (i = 0; i < 10; i++)
 		for (j = 0; j < MAX1; j++)
 			mul[i][j] = '.';
 
@@ -47,7 +44,6 @@ void multiply(char *num_1, char *num_2)
 		for (j = 0; j < MAX2; j++)
 			answer[i][j] = '.';
 
-	/* 1. Creating multiplication table*/
 	for (tag = 0, i = 0; i < 10; i++)
 	{
 		for (j = 0; j <= len_1; j++)
@@ -68,7 +64,6 @@ void multiply(char *num_1, char *num_2)
 		}
 	}
 
-	/* 2. Creating answer table*/
 	for (j = 0; j < len_2; j++)
 	{
 		pos_2 = len_2 - j - 1;
@@ -87,6 +82,8 @@ void multiply(char *num_1, char *num_2)
  */
 int is_a_number(char *a_str)
 {
+	if (*a_str == '\0')
+		return (_FALSE_);
 	while (*a_str != '\0')
 	{
 		if (*a_str < '0' || *a_str > '9')
@@ -110,42 +107,36 @@ void sum_and_print(char a[MAX1][MAX2], int len_1, int len_2)
 	char total[MAX2], ans[MAX2 - 1];
 	char *ar;
 
-	/* 3. Add each column from left to right */
 	tag = 0;
 	for (j = 0; j <= (len_1 + len_2); j++)
 	{
 		sum = 0;
 		for (i = 0; i < len_2; i++)
 			sum += (a[i][j] >= '0' && a[i][j] <= '9') ? a[i][j] - 48 : 0;
-		value = (sum + tag) % 10; /* las digit added */
-		total[j] = (value + '0'); /* converted to*/
+		value = (sum + tag) % 10;
+		total[j] = (value + '0');
 		tag = (sum + tag) / 10;
 	}
 
-	/* Reverse the string */
 	for (i = 0; i < len_1 + len_2; i++)
-	{
 		ans[i] = total[len_1 + len_2 - 1 - i];
-	}
 	ans[i] = '\0';
 
-	/* remove 0-s from the left side of the string */
 	value = str_len(ans);
 	for (i = 0; i < value; i++)
 	{
-		if (ans[i] == '0')
-			ar = &ans[i + 1];
-		else
+		if (ans[i] != '0')
 		{
 			ar = &ans[i];
-			i = value;
+			break;
 		}
 	}
+	if (i == value)
+		ar = "0";
+
 	for (i = 0; ar[i] != '\0'; i++)
-	{
 		_putchar(ar[i]);
-	}
-	putchar('\n');
+	_putchar('\n');
 }
 
 /**
@@ -157,8 +148,8 @@ void sum_and_print(char a[MAX1][MAX2], int len_1, int len_2)
 int str_len(char *a)
 {
 	int i;
+
 	for (i = 0; a[i] != '\0'; i++)
-	{
-	}
+		;
 	return (i);
 }
