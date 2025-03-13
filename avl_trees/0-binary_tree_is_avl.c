@@ -10,7 +10,7 @@ int height(binary_tree_t *tree)
 	int left, right;
 
 	if (!tree)
-		return (0);
+		return (-1);
 	if (!tree->left && !tree->right)
 		return (1);
 	left = height(tree->left) + 1;
