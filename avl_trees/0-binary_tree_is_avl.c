@@ -2,42 +2,45 @@
 #include "binary_tree_is_bts.c"
 
 /**
- * height - measures the height of a binary tree
- * @tree: pointer to the node
- * Return: height
- **/
-int height(binary_tree_t *tree)
+ * height - Measures the height of a binary tree.
+ * @tree: Pointer to the node.
+ *
+ * Return: Height of the tree.
+ */
+int height(const binary_tree_t *tree)
 {
     int left, right;
 
     if (!tree)
-        return (0); // Changed from 1 to 0
+        return (-1); /* Changed from 0 to -1 for correct balance factor */
 
     left = height(tree->left);
     right = height(tree->right);
 
-    return (left > right ? left + 1 : right + 1);
+    return ((left > right ? left : right) + 1);
 }
 
 /**
- * binary_tree_balance - measures the balance factor of a binary tree
- * @tree: pointer to the node (use height)
- * Return: balance factor from the node
- **/
+ * binary_tree_balance - Measures the balance factor of a binary tree.
+ * @tree: Pointer to the node.
+ *
+ * Return: Balance factor of the node.
+ */
 int binary_tree_balance(const binary_tree_t *tree)
 {
     if (!tree)
         return (0);
 
-    return height(tree->left) - height(tree->right);
+    return (height(tree->left) - height(tree->right));
 }
 
 /**
- * preorder_balance - goes through a binary tree using pre-order traversal
- * @f: pointer to function that checks balance
- * @t: pointer to the root tree
- * Return: balanced 1 , unbalanced 0
- **/
+ * preorder_balance - Checks balance for each node using pre-order traversal.
+ * @t: Pointer to the root tree.
+ * @f: Pointer to function that checks balance.
+ *
+ * Return: 1 if balanced, 0 otherwise.
+ */
 int preorder_balance(const binary_tree_t *t, int (*f)(const binary_tree_t *))
 {
     if (!t)
@@ -46,22 +49,22 @@ int preorder_balance(const binary_tree_t *t, int (*f)(const binary_tree_t *))
     if (f(t) > 1 || f(t) < -1)
         return (0);
 
-    return preorder_balance(t->left, f) && preorder_balance(t->right, f);
+    return (preorder_balance(t->left, f) && preorder_balance(t->right, f));
 }
 
 /**
- * binary_tree_is_avl - Determine if tree is AVL
- * @tree: pointer to the root
- * Return: 1 if tree is AVL / 0 otherwise
- **/
+ * binary_tree_is_avl - Determines if a tree is AVL.
+ * @tree: Pointer to the root.
+ *
+ * Return: 1 if tree is AVL, 0 otherwise.
+ */
 int binary_tree_is_avl(const binary_tree_t *tree)
 {
     if (!tree)
         return (0);
-    if (!tree->left && !tree->right)
-        return (1);
+
     if (!binary_tree_is_bst(tree))
         return (0);
 
-    return preorder_balance(tree, &binary_tree_balance);
+    return (preorder_balance(tree, &binary_tree_balance));
 }
